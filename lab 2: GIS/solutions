@@ -1,0 +1,122 @@
+\o lab03_ex01.txt
+CREATE TABLE cities (
+    name VARCHAR(100),
+    center_coordinates GEOMETRY
+);
+
+insert into cities (name,center_coordinates) values ('Cracow', ST_SetSRID(ST_MakePoint(19.938333, 50.061389), 4326));
+insert into cities (name,center_coordinates) values ('Tychy', ST_SetSRID(ST_MakePoint(18.986667,50.123611),4326));
+  
+SELECT ST_Distance(
+    (SELECT center_coordinates FROM cities WHERE name = 'Cracow'),
+    (SELECT center_coordinates FROM cities WHERE name = 'Tychy')
+) as distance_in_degrees;
+
+SELECT ST_Distance(
+    ST_Transform((SELECT center_coordinates FROM cities WHERE name = 'Cracow'), 32634),
+    ST_Transform((SELECT center_coordinates FROM cities WHERE name = 'Tychy'), 32634)
+) AS distance_in_meters;
+
+SELECT ST_Distance(
+    ST_Transform((SELECT center_coordinates FROM cities WHERE name = 'Cracow'), 2180),
+    ST_Transform((SELECT center_coordinates FROM cities WHERE name = 'Tychy'), 2180)
+) AS distance_in_meters;
+\o
+
+\o lab03_ex02.txt
+create table cities2 ( name varchar(100), center_coordinates geography);
+ALTER TABLE cities2                                                                                 
+  ALTER COLUMN center_coordinates
+  TYPE Geography(Point, 4326)
+  USING ST_SetSRID(center_coordinates, 4326);
+
+
+insert into cities2 (name,center_coordinates) values ('Cracow', 'SRID=4326;POINT(19.938333 50.061389)');
+insert into cities2 (name,center_coordinates) values ('Tychy', 'SRID=4326;POINT(18.986667 50.123611)');
+INSERT INTO cities2 (name, center_coordinates) values ('Paris', 'SRID=4326;POINT(2.352222 48.856613)'); 
+
+select st_distance(  (SELECT center_coordinates FROM cities2 WHERE name = 'Cracow'),
+    (SELECT center_coordinates FROM cities2 WHERE name = 'Tychy')
+) as distance_in_meters;
+\o
+
+\o lab03_ex03.txt
+
+-- commands to run in terminal:
+-- shp2pgsql -s 4326 admin.shp > admin.sql
+-- shp2pgsql -s 2180 lamps.shp > lamps.sql
+-- shp2pgsql -s 4326 roads.shp > roads.sql
+
+ \i krakow/admin/admin.sql  
+ \i krakow/lamps/lamps.sql   
+ \i krakow/roads/roads.sql 
+
+ALTER TABLE admin ADD COLUMN center_coordinates GEOGRAPHY;
+UPDATE admin SET center_coordinates = ST_GeographyFromText(ST_AsText(geom));
+
+-- For lamps table
+ALTER TABLE lamps ADD COLUMN center_coordinates GEOGRAPHY;
+UPDATE lamps SET center_coordinates = ST_GeographyFromText(ST_AsText(geom));
+
+-- For roads table
+ALTER TABLE roads ADD COLUMN center_coordinates GEOGRAPHY;
+UPDATE roads SET center_coordinates = ST_GeographyFromText(ST_AsText(geom));
+\o
+
+\o lab03_ex04.txt
+--using geometry
+SELECT ST_Area(ST_Transform(geom,2180))/(1000*1000) AS area_sq_km
+FROM admin
+WHERE name = 'Kraków';
+
+--using geography
+SELECT ST_Area(center_coordinates) / (1000 * 1000) AS area_sq_km
+FROM admin
+WHERE name = 'Kraków';
+
+\o
+
+
+\o lab03_ex05.txt
+--  select distinct road_type from roads;
+
+SELECT SUM(ST_Length(ST_Intersection(ST_Transform(roads.geom, 32633), ST_Transform(admin.geom, 32633))))/1000 AS total_length_km
+FROM roads
+JOIN admin ON ST_Intersects(roads.geom, admin.geom)
+WHERE admin.name = 'Kraków'
+AND roads.road_type IN ('motorway', ' motorway_link','trunk', ' trunk_link','primary', ' primary_link', 'secondary',' secondary_link', 'tertiary', 'tertiary_link');
+
+\o
+
+
+\o lab03_ex06.txt
+
+SELECT
+  r.road_name,
+  COUNT(l.gid) AS number_of_lamps
+FROM
+  roads r
+LEFT JOIN
+  (
+    SELECT
+      gid,
+      ST_Transform(geom, 2180) AS geom
+    FROM
+      lamps
+  ) l
+ON
+  ST_Contains(
+    ST_Buffer(ST_Transform(r.geom, 2180), 
+      CASE
+        WHEN r.road_width IS NOT NULL THEN r.road_width / 2 + 1000
+        WHEN r.lane_count IS NOT NULL THEN r.lane_count * 3.5 / 2 + 1000
+        ELSE 6 / 2 + 1000
+      END,
+      'endcap=flat'),
+    l.geom
+  )
+GROUP BY
+  r.road_name
+ORDER BY
+  number_of_lamps DESC;
+  \o
