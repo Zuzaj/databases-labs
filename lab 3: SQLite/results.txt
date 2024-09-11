@@ -1,0 +1,200 @@
+EXERCISE 1
+
+Time taken to generate records: 0.193217 seconds
+Record found: id=999999, name=Name999999, desc=Description999999
+Time taken to search for a record: 0.005048 seconds
+Memory usage: 114668 KB
+[zuzaj@lab lab04]$ ./a.out
+Time taken to generate records: 0.193009 seconds
+Record found: id=999999, name=Name999999, desc=Description999999
+Time taken to search for a record: 0.005304 seconds
+Memory usage: 114664 KB
+[zuzaj@lab lab04]$ ./a.out
+Time taken to generate records: 0.198758 seconds
+Record found: id=999999, name=Name999999, desc=Description999999
+Time taken to search for a record: 0.005240 seconds
+Memory usage: 114672 KB
+[zuzaj@lab lab04]$ ./a.out
+Time taken to generate records: 0.194190 seconds
+Record found: id=999999, name=Name999999, desc=Description999999
+Time taken to search for a record: 0.005564 seconds
+Memory usage: 114668 KB
+[zuzaj@lab lab04]$ ./a.out
+Time taken to generate records: 0.193635 seconds
+Record found: id=999999, name=Name999999, desc=Description999999
+Time taken to search for a record: 0.005696 seconds
+Memory usage: 114672 KB
+
+
+For program without using sqlite the results are:
+Average time taken to generate records is about 0.195 seconds. 
+Average time taken to search the record is about 0.0053 seconds.
+Let's see how using sqlite3 library affects the results. 
+
+
+EXERCISE 2
+
+Results:
+
+[zuzaj@lab lab04]$ ./program
+Data storage method: Memory
+Journaling mode: DELETE
+Time taken to generate records: 17.933360 seconds
+Use of index: No
+Record found: id=999999, name=Name999999, desc=Description999999
+Time taken to search for a record: 0.000044 seconds
+Memory usage: 180796 KB
+
+Data storage method: Memory
+Journaling mode: DELETE
+Time taken to generate records: 18.037156 seconds
+Use of index: Yes
+Record found: id=999999, name=Name999999, desc=Description999999
+Time taken to search for a record: 0.000034 seconds
+Memory usage: 243484 KB
+
+Data storage method: Memory
+Journaling mode: DELETE
+Transaction: BEGIN
+Time taken to generate records: 3.194507 seconds
+Use of index: No
+Transaction: COMMIT
+Record found: id=999999, name=Name999999, desc=Description999999
+Time taken to search for a record: 0.000062 seconds
+Memory usage: 306052 KB
+
+Data storage method: Memory
+Journaling mode: DELETE
+Transaction: BEGIN
+Time taken to generate records: 3.199133 seconds
+Use of index: Yes
+Transaction: COMMIT
+Record found: id=999999, name=Name999999, desc=Description999999
+Time taken to search for a record: 0.000062 seconds
+Memory usage: 368356 KB
+
+Data storage method: Memory
+Journaling mode: WAL
+Time taken to generate records: 10.207011 seconds
+Use of index: No
+Record found: id=999999, name=Name999999, desc=Description999999
+Time taken to search for a record: 0.000029 seconds
+Memory usage: 430944 KB
+
+Data storage method: Memory
+Journaling mode: WAL
+Time taken to generate records: 10.205816 seconds
+Use of index: Yes
+Record found: id=999999, name=Name999999, desc=Description999999
+Time taken to search for a record: 0.000028 seconds
+Memory usage: 493452 KB
+
+Data storage method: Memory
+Journaling mode: WAL
+Transaction: BEGIN
+Time taken to generate records: 3.191821 seconds
+Use of index: No
+Transaction: COMMIT
+Record found: id=999999, name=Name999999, desc=Description999999
+Time taken to search for a record: 0.000039 seconds
+Memory usage: 555960 KB
+
+Data storage method: Memory
+Journaling mode: WAL
+Transaction: BEGIN
+Time taken to generate records: 3.192465 seconds
+Use of index: Yes
+Transaction: COMMIT
+Record found: id=999999, name=Name999999, desc=Description999999
+Time taken to search for a record: 0.000041 seconds
+Memory usage: 618468 KB
+
+Data storage method: File
+Journaling mode: DELETE
+Time taken to generate records: 17.923017 seconds
+Use of index: No
+Record found: id=999999, name=Name999999, desc=Description999999
+Time taken to search for a record: 0.000034 seconds
+Memory usage: 680956 KB
+
+Data storage method: File
+Journaling mode: DELETE
+Time taken to generate records: 17.959876 seconds
+Use of index: Yes
+Record found: id=999999, name=Name999999, desc=Description999999
+Time taken to search for a record: 0.000034 seconds
+Memory usage: 743524 KB
+
+Data storage method: File
+Journaling mode: DELETE
+Transaction: BEGIN
+Time taken to generate records: 3.198656 seconds
+Use of index: No
+Transaction: COMMIT
+Record found: id=999999, name=Name999999, desc=Description999999
+Time taken to search for a record: 0.000065 seconds
+Memory usage: 806092 KB
+
+Data storage method: File
+Journaling mode: DELETE
+Transaction: BEGIN
+Time taken to generate records: 3.225025 seconds
+Use of index: Yes
+Transaction: COMMIT
+Record found: id=999999, name=Name999999, desc=Description999999
+Time taken to search for a record: 0.000058 seconds
+Memory usage: 868660 KB
+
+Data storage method: File
+Journaling mode: WAL
+Time taken to generate records: 10.262027 seconds
+Use of index: No
+Record found: id=999999, name=Name999999, desc=Description999999
+Time taken to search for a record: 0.000028 seconds
+Memory usage: 930988 KB
+
+Data storage method: File
+Journaling mode: WAL
+Time taken to generate records: 10.281092 seconds
+Use of index: Yes
+Record found: id=999999, name=Name999999, desc=Description999999
+Time taken to search for a record: 0.000026 seconds
+Memory usage: 993528 KB
+
+Data storage method: File
+Journaling mode: WAL
+Transaction: BEGIN
+Time taken to generate records: 3.201796 seconds
+Use of index: No
+Transaction: COMMIT
+Record found: id=999999, name=Name999999, desc=Description999999
+Time taken to search for a record: 0.000039 seconds
+Memory usage: 1056036 KB
+
+Data storage method: File
+Journaling mode: WAL
+Transaction: BEGIN
+Time taken to generate records: 3.190526 seconds
+Use of index: Yes
+Transaction: COMMIT
+Record found: id=999999, name=Name999999, desc=Description999999
+Time taken to search for a record: 0.000040 seconds
+Memory usage: 1118548 KB
+
+
+Conclusions:
+At first glance we can see that all of the methods needed much more time to generate the records - the times vary from 3 to even 18 seconds. The reason for that is that in previous exercise we had direct control over memory allocation and manipulation. Now we are using additional library which needs to interact with database engine - that takes time. 
+
+Data Storage Method:
+For Memory mode, the data is stored in RAM. For File mode, the data are stored in files on disk. In case of our records, time needed to generate and to search is very similar in both cases. The difference is significant when considering memory usage - File mode demands much more memory as the files are saved across program executions, not lost after program's termination. 
+
+Journaling mode:
+We can see that Write-Along Logging mode is beneficial for creating the records. That is because the changes are first written to log files before being applied to the database. In DELETE mode, each change has to be directly written to database file. As with WAL we can have 1 writing operation instead of many, the execution time decreases. 
+However, with WAL mode the memory usage increases, because we have to store the log files. 
+Use of transactions
+
+Transactions:
+When it comes to transactions, using BEGIN and COMMIT enables us to load the records much quicker. However, the search times tend to be longer. Also memory usage increaces. The loading of data is much faster, because it is performed in transactions - it means that instead of committing each insert operation immediately, program performs them in bulks, decreasing the number of disk writes and index updates. When it comes to accessing data, transactions provide isolation so that multiple read and write operations don't interfere with each other. That makes the searching safer, but also slower. Transactions also tend to use more memory during execution, as they need to store some data from particular transaction.  
+
+Index:
+We may observe that using index slightly decreases the time taken to search for a record. That is because the index enable the database engine to quickly locate records based on indexed columns. Without index, scanning whole database for matching records is needed. The difference is relatively small because we don't have many records, but databases tend to be huge. Therefore, using index is definitely beneficial for searching. However, the memory usage with index increases, as the database has to store information about the index and data structures it needs.  
