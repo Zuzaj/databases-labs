@@ -1,0 +1,94 @@
+Lab: Graph Databases
+Exercises labelled with "*" are optional.
+
+Lab. 315 Java Configuration
+Neo4J 5.x.y is compatible with more recent Java. 
+
+If you want to use Neo4j 4.x.y mind that it requires Java 11, make sure that it's installed and default. The command:
+
+/usr/libexec/java_home -V
+
+will give you a list of available versions:
+
+
+Matching Java Virtual Machines (2):
+    18.0.1.1 (arm64) "Oracle Corporation" - "Java SE 18.0.1.1" /Library/Java/JavaVirtualMachines/jdk-18.0.1.1.jdk/Contents/Home
+    11.0.15 (arm64) "Homebrew" - "OpenJDK 11.0.15" /opt/homebrew/Cellar/openjdk@11/11.0.15/libexec/openjdk.jdk/Contents/Home
+/Library/Java/JavaVirtualMachines/jdk-18.0.1.1.jdk/Contents/Home
+
+            
+Set `JAVA_HOME` to the desired version:
+
+export JAVA_HOME=`/usr/libexec/java_home -v 11.0.15`
+
+
+
+
+Install Neo4J
+Download Neo4 Graph Database Self-Managed, Community from here.
+
+Unpack the archive to a chosen location in the file system. It would create a Neo4J directory, it will be referred to as Neo4J directory later on.
+
+Go to the Neo4J directory and run the database locally by issuing the following command:
+bin/neo4j start 
+or:
+
+bin/neo4j console
+Open http://localhost:7474/ in a browser.
+
+Warning: before doing anything the web interface would ask you to change the default password.
+
+Enter data
+There is a map of the AGH Campus. Create a graph using Cypher and load it into your Neo4J instance. The graph is to represent the following features:
+
+buildings: S-1, S-2, D-1, U-2, A-4, A-3, C-4, C-3, C-2, U-1, H-A2, H-A1, A-2, A-1, C-1,A-0, B-1, B-2, B-3, B-4, H-B3B4, H-B1B2; use nodes and property "name",
+building functions: service facilities, research and teaching facilities; use labels: "SERVICE", "RESEARCH", "TEACHING",
+buildings' adjacency: e.g. C-3 is adjacent to C-2 and there is a foot path connecting them on each floor; mind that not all floors are connected e.g.  C-1 and A-1 is connected via 1st floor only, if you are not sure which buildings are connected at which floors make it up :); use and edge with property "floor" (value of 0 represents a ground floor),
+faculty head quarter locations (labeled with numbers on the map); each faculty headquarter should be represented as a node with "HQ" label,
+classrooms you have had classes in; their numbers and relationships with the buildings; represent each of them as a node with "CLASSROOM" label,
+building entrances, each entrance as a separate node labelled with "ENTRANCE"; all entrances are connected with each other by footpaths.
+Analytics
+Run the following queries:
+
+are there any buildings that are not connected directly (not through an entrance) to other buildings,
+how many service facilities there are,
+what buildings A-1 is connected with (is adjacent to) and at which floors,
+how to get from the Candidates Application Centre to the Faculty of Mechanical Engineering and Robotics without leaving the buildings (not going through an entrance),
+what is a shortest path (minimal number of buildings to go through) from the C-3 ground floor to the A-0 entrance,
+what are the buildings from which you can walk to other three buildings without going outside (adjacent buildings)?
+REST/API*
+Use curl to connect to the database and execute one of the queries from the previous exercise.
+
+See the HTTP/API documentation, and authentication and authorization.
+
+For authentication you need to encode your user name and password using Base64 (see Base64 encoder ) in a form username:password and send it as the Authorization HTTP header. For example, having username:password encoded as: bmVvNGo6YQ== the following statement will execute MATCH (n) RETURN id(n) query.
+
+curl -X POST -H 'Content-Type:application/json' -H 'Authorization: Basic bmVvNGo6YQ==' http://localhost:7474/db/data/transaction/commit -d '{"statements" : [ {"statement" : "MATCH (n) RETURN id(n)"} ] }' 
+Or simpler, without a need for your own base64 encoding:
+
+curl -X POST -H 'Content-Type:application/json' --user 'username:password' http://localhost:7474/db/data/transaction/commit -d '{"statements" : [ {"statement" : "MATCH (n) RETURN id(n)"} ] }' 
+
+If there are two nodes in the database the result could look like this:
+
+{"results":[{"columns":["id(n)"],"data":[{"row":[0],"meta":[null]},{"row":[1],"meta":[null]}]}],"errors":[]
+Creating a Cypher dump*
+Dumping the data to a Cypher is possible by using the APOC library and involves several easy steps:
+
+Download the .jar file from a release appropriate for your Neo4j version (that will usually be the most recent one), e.g. apoc-4.4.0.9-all.jar.
+
+Copy the file to the plugins directory of your instance.
+
+In order to allow APOC to read and write data from/to files in the local filesystem, add the lines:
+
+apoc.export.file.enabled=true
+apoc.import.file.enabled=true
+to your conf/neo4j.conf file.
+
+Now, you can use APOC export functions to obtain a copy of your graph, e.g. to dump the entire database, use:
+
+CALL apoc.export.cypher.all('export.cypher',{format:'cypher-shell'})
+which will result in the graph being written to the import/export.cypher file.
+
+Report
+Submit the cypher language queries from the Analytics section above. Single text file would be fine.
+
