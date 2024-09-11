@@ -1,0 +1,17 @@
+Data Warehouse
+Setup
+Use your existing PostgreSQL database access method.
+
+OLTP (Online Transational Processing)
+The following files contain a backup of a transactional database system: init.sql, trans.sql.
+Restore them into your database, using a separate schema is strongly recommended to avoid name clash with existing tables.
+
+OLAP (Online Analytical Processing)
+Design an OLAP star model based on the given OLTP system. Create at least 3 dimensions.
+Implement OLAP as a relational database in a new schema, e.g. olap; when working with schemas, remember about setting the search_path variable, e.g.:
+
+SET search_path TO olap, public;
+Implement ETL with SQL loading your OLAP model with data from the OLTP tables. Use INSERT INTO ... SELECT.
+Write an SQL query on the OLAP model which provides aggregated values for each month for a selected year. Pick the value depending on what your fact table looks like.
+Report
+Please submit answers to questions 3 and 5 in a single text file. 
