@@ -1,0 +1,169 @@
+Ex 1,2,3,4
+{
+ "id": "0c0e00549e799195d8b35eb63d285f86",
+ "key": "0c0e00549e799195d8b35eb63d285f86",
+ "value": {
+  "rev": "1-b504821c9d37abebf146c170745383ed"
+ },
+ "doc": {
+  "_id": "0c0e00549e799195d8b35eb63d285f86",
+  "_rev": "1-b504821c9d37abebf146c170745383ed",
+  "product": "bread",
+  "price": 2.2,
+  "store": "Biedronka",
+  "when": "weekly"
+ }
+}
+
+ "id": "0c0e00549e799195d8b35eb63d28949e",
+ "key": "0c0e00549e799195d8b35eb63d28949e",
+ "value": {
+  "rev": "1-5417c76f407480a97dc8fa79080c77fb"
+ },
+ "doc": {
+  "_id": "0c0e00549e799195d8b35eb63d28949e",
+  "_rev": "1-5417c76f407480a97dc8fa79080c77fb",
+  "product": "tomato",
+  "price": 2,
+  "store": "Biedronka",
+  "when": "weekly"
+ }
+}
+
+{
+ "id": "0c0e00549e799195d8b35eb63d28c65b",
+ "key": "0c0e00549e799195d8b35eb63d28c65b",
+ "value": {
+  "rev": "1-08b82765ba95f2ac80255ffd14fa28a9"
+ },
+ "doc": {
+  "_id": "0c0e00549e799195d8b35eb63d28c65b",
+  "_rev": "1-08b82765ba95f2ac80255ffd14fa28a9",
+  "product": "tomato",
+  "price": 3,
+  "store": "Lidl",
+  "when": "weekly"
+ }
+}
+
+{
+ "id": "0c0e00549e799195d8b35eb63d28d590",
+ "key": "0c0e00549e799195d8b35eb63d28d590",
+ "value": {
+  "rev": "1-f6fae3264f55cd4fa49c073edd392336"
+ },
+ "doc": {
+  "_id": "0c0e00549e799195d8b35eb63d28d590",
+  "_rev": "1-f6fae3264f55cd4fa49c073edd392336",
+  "product": "tomato",
+  "price": 4,
+  "store": "Auchan",
+  "when": "weekly"
+ }
+}
+
+{
+ "id": "0c0e00549e799195d8b35eb63d290c4d",
+ "key": "0c0e00549e799195d8b35eb63d290c4d",
+ "value": {
+  "rev": "1-323d839c7f5113392ea7a5ac111600e9"
+ },
+ "doc": {
+  "_id": "0c0e00549e799195d8b35eb63d290c4d",
+  "_rev": "1-323d839c7f5113392ea7a5ac111600e9",
+  "product": "moon rocket",
+  "price": 119,
+  "store": "Auchan",
+  "description": "Black and White Falcon Heavy"
+ }
+}
+
+{
+ "id": "0c0e00549e799195d8b35eb63d292f8a",
+ "key": "0c0e00549e799195d8b35eb63d292f8a",
+ "value": {
+  "rev": "1-52de7dcb64edbed23a98b741061f485a"
+ },
+ "doc": {
+  "_id": "0c0e00549e799195d8b35eb63d292f8a",
+  "_rev": "1-52de7dcb64edbed23a98b741061f485a",
+  "product": "lollipop",
+  "price": 1.2,
+  "store": "Lidl"
+ }
+}
+
+{
+ "id": "0c0e00549e799195d8b35eb63d295212",
+ "key": "0c0e00549e799195d8b35eb63d295212",
+ "value": {
+  "rev": "1-f3e9f69b229e12629d5299dc1a2bc1d0"
+ },
+ "doc": {
+  "_id": "0c0e00549e799195d8b35eb63d295212",
+  "_rev": "1-f3e9f69b229e12629d5299dc1a2bc1d0",
+  "product": "lollipop",
+  "price": 1.4,
+  "store": "Biedronka"
+ }
+}
+
+{
+ "id": "0c0e00549e799195d8b35eb63d296a8a",
+ "key": "0c0e00549e799195d8b35eb63d296a8a",
+ "value": {
+  "rev": "1-d41a8ab042173693e514a41c62298775"
+ },
+ "doc": {
+  "_id": "0c0e00549e799195d8b35eb63d296a8a",
+  "_rev": "1-d41a8ab042173693e514a41c62298775",
+  "product": "trash",
+  "store": "Biedronka"
+ }
+}
+
+{
+ "id": "0c0e00549e799195d8b35eb63d297ec7",
+ "key": "0c0e00549e799195d8b35eb63d297ec7",
+ "value": {
+  "rev": "1-e256c8d4ee465193da79ba505ef6db0d"
+ },
+ "doc": {
+  "_id": "0c0e00549e799195d8b35eb63d297ec7",
+  "_rev": "1-e256c8d4ee465193da79ba505ef6db0d",
+  "book": "Alice in Wonderland",
+  "price": 22.4,
+  "store": "Biedronka"
+ }
+}
+
+
+{
+ "id": "_design/shopping_list",
+ "key": "_design/shopping_list",
+ "value": {
+  "rev": "11-cea27547aee441707d3be3f443c03780"
+ },
+ "doc": {
+  "_id": "_design/shopping_list",
+  "_rev": "11-cea27547aee441707d3be3f443c03780",
+  "views": {
+   "items_by_store": {
+    "map": "function(doc) {\n    if (doc.store && doc.product && doc.price) {\n        emit(doc.store, doc);\n    }\n}"
+   },
+   "count_items_by_store": {
+    "reduce": "_count",
+    "map": "function(doc) {\n    if (doc.product && doc.price && doc.store) {\n        emit(doc.store, 1);\n    }\n}"
+   },
+   "avg": {
+    "reduce": "function(keys, values, rereduce) {\n    if (rereduce) {\n        var count = sum(values.map(function(v) {\n            return v.count;\n        }));\n        var sumValues = sum(values.map(function(v) {\n            return v.sum;\n        }));\n        return {\n            sum: sumValues,\n            count: count,\n            avg: sumValues / count\n        };\n    } else {\n        return {\n            sum: sum(values),\n            count: values.length,\n            avg: sum(values) / values.length\n        };\n    }\n}",
+    "map": "function(doc) {\n    if (doc.product && doc.price && doc.store) {\n        emit(doc.product, doc.price);\n    }\n}"
+   }
+  }
+ }
+}
+
+Ex. 5
+curl -u admin:ztb2020 -X GET "http://nosql.kis.agh.edu.pl:5984/zuzaj/_design/shopping_list/_view/items_by_store?key=\"Lidl\""
+Ex. 6
+curl -u admin:ztb2020 -X GET "http://nosql.kis.agh.edu.pl:5984/zuzaj/_design/shopping_list/_view/count_items_by_store?key=\"Biedronka\""
