@@ -1,0 +1,229 @@
+1.1
+CREATE (s1:Building {name: 'S-1'}),
+       (s2:Building {name: 'S-2'}),
+       (d1:Building {name: 'D-1'}),
+       (u2:Building {name: 'U-2'}),
+       (a4:Building {name: 'A-4'}),
+       (a3:Building {name: 'A-3'}),
+       (c4:Building {name: 'C-4'}),
+       (c3:Building {name: 'C-3'}),
+       (c2:Building {name: 'C-2'}),
+       (u1:Building {name: 'U-1'}),
+       (ha2:Building {name: 'H-A2'}),
+       (ha1:Building {name: 'H-A1'}),
+       (a2:Building {name: 'A-2'}),
+       (a1:Building {name: 'A-1'}),
+       (c1:Building {name: 'C-1'}),
+       (a0:Building {name: 'A-0'}),
+       (b1:Building {name: 'B-1'}),
+       (b2:Building {name: 'B-2'}),
+       (b3:Building {name: 'B-3'}),
+       (b4:Building {name: 'B-4'}),
+       (h_b3b4:Building {name: 'H-B3B4'}),
+       (h_b1b2:Building {name: 'H-B1B2'});
+
+
+1.2
+MATCH (b:Building)
+WHERE b.name IN ['S-1', 'S-2']
+SET b:SERVICE;
+
+MATCH (b:Building)
+WHERE b.name IN ['D-1', 'U-2', 'A-4','A-3', 'C-4', 'C-3', 'C-2', 'U-1', 'H-A2', 'H-A1', 'A-2', 'A-1', 'C-1', 'A-0', 'B-1', 'B-2', 'B-3', 'B-4', 'H-B3B4', 'H-B1B2']
+SET b:RESEARCH;
+
+MATCH (b:Building)
+WHERE b.name IN ['D-1', 'U-2', 'A-4','A-3', 'C-4', 'C-3', 'C-2', 'U-1', 'H-A2', 'H-A1', 'A-2', 'A-1', 'C-1', 'A-0', 'B-1', 'B-2', 'B-3', 'B-4', 'H-B3B4', 'H-B1B2']
+SET b:TEACHING;
+
+1.3
+MATCH (c1:Building {name: 'C-1'}), (a1:Building {name: 'A-1'})
+CREATE (c1)-[:CONNECTED_ON_FLOOR {floor: 1}]->(a1),
+       (a1)-[:CONNECTED_ON_FLOOR {floor: 1}]->(c1);
+
+MATCH (d1:Building {name: 'D-1'}), (u2:Building {name: 'U-2'})
+CREATE (d1)-[:CONNECTED_ON_FLOOR {floor: 0}]->(u2),
+       (u2)-[:CONNECTED_ON_FLOOR {floor: 0}]->(d1);
+
+MATCH (d1:Building {name: 'D-1'}), (a4:Building {name: 'A-4'})
+CREATE (d1)-[:CONNECTED_ON_FLOOR {floor: 1}]->(a4),
+       (a4)-[:CONNECTED_ON_FLOOR {floor: 1}]->(d1);
+
+MATCH (u2:Building {name: 'U-2'}), (a3:Building {name: 'A-3'})
+CREATE (u2)-[:CONNECTED_ON_FLOOR {floor: 1}]->(a3),
+       (a3)-[:CONNECTED_ON_FLOOR {floor: 1}]->(u2);
+
+MATCH (a3:Building {name: 'A-3'}), (a4:Building {name: 'A-4'})
+CREATE (a3)-[:CONNECTED_ON_FLOOR {floor: 0}]->(a4),
+       (a4)-[:CONNECTED_ON_FLOOR {floor: 0}]->(a3),
+       (a3)-[:CONNECTED_ON_FLOOR {floor: 1}]->(a4),
+       (a4)-[:CONNECTED_ON_FLOOR {floor: 1}]->(a3),
+       (a3)-[:CONNECTED_ON_FLOOR {floor: 2}]->(a4),
+       (a4)-[:CONNECTED_ON_FLOOR {floor: 2}]->(a3);
+
+MATCH (a4:Building {name: 'A-4'}), (c4:Building {name: 'C-4'})
+CREATE (a4)-[:CONNECTED_ON_FLOOR {floor: 0}]->(c4),
+       (c4)-[:CONNECTED_ON_FLOOR {floor: 0}]->(a4);
+
+
+MATCH (c3:Building {name: 'C-3'}), (c2:Building {name: 'C-2'})
+CREATE (c3)-[:CONNECTED_ON_FLOOR {floor: 0}]->(c2),
+       (c2)-[:CONNECTED_ON_FLOOR {floor: 0}]->(c3),
+       (c3)-[:CONNECTED_ON_FLOOR {floor: 1}]->(c2),
+       (c2)-[:CONNECTED_ON_FLOOR {floor: 1}]->(c3),
+       (c3)-[:CONNECTED_ON_FLOOR {floor: 2}]->(c2),
+       (c2)-[:CONNECTED_ON_FLOOR {floor: 2}]->(c3),
+       (c3)-[:CONNECTED_ON_FLOOR {floor: 3}]->(c2),
+       (c2)-[:CONNECTED_ON_FLOOR {floor: 3}]->(c3);
+
+MATCH (c3:Building {name: 'C-1'}), (c2:Building {name: 'C-2'})
+CREATE (c3)-[:CONNECTED_ON_FLOOR {floor: 0}]->(c2),
+       (c2)-[:CONNECTED_ON_FLOOR {floor: 0}]->(c3),
+       (c3)-[:CONNECTED_ON_FLOOR {floor: 1}]->(c2),
+       (c2)-[:CONNECTED_ON_FLOOR {floor: 1}]->(c3),
+       (c3)-[:CONNECTED_ON_FLOOR {floor: 2}]->(c2),
+       (c2)-[:CONNECTED_ON_FLOOR {floor: 2}]->(c3),
+       (c3)-[:CONNECTED_ON_FLOOR {floor: 3}]->(c2),
+       (c2)-[:CONNECTED_ON_FLOOR {floor: 3}]->(c3);
+
+MATCH (b1:Building {name: 'H-A1'}), (b2:Building {name: 'H-A2'})
+CREATE (b1)-[:CONNECTED_ON_FLOOR {floor: 0}]->(b2),
+       (b2)-[:CONNECTED_ON_FLOOR {floor: 0}]->(b1);
+
+MATCH (b1:Building {name: 'H-A1'}), (b2:Building {name: 'A-1'})
+CREATE (b1)-[:CONNECTED_ON_FLOOR {floor: 0}]->(b2),
+       (b2)-[:CONNECTED_ON_FLOOR {floor: 0}]->(b1);
+
+MATCH (b1:Building {name: 'H-A2'}), (b2:Building {name: 'A-2'})
+CREATE (b1)-[:CONNECTED_ON_FLOOR {floor: 0}]->(b2),
+       (b2)-[:CONNECTED_ON_FLOOR {floor: 0}]->(b1);
+
+MATCH (b1:Building {name: 'A-2'}), (b2:Building {name: 'A-1'})
+CREATE (b1)-[:CONNECTED_ON_FLOOR {floor: 0}]->(b2),
+       (b2)-[:CONNECTED_ON_FLOOR {floor: 0}]->(b1);
+
+MATCH (b1:Building {name: 'A-1'}), (b2:Building {name: 'C-1'})
+CREATE (b1)-[:CONNECTED_ON_FLOOR {floor: 0}]->(b2),
+       (b2)-[:CONNECTED_ON_FLOOR {floor: 0}]->(b1);
+
+MATCH (b1:Building {name: 'A-1'}), (b2:Building {name: 'A-0'})
+CREATE (b1)-[:CONNECTED_ON_FLOOR {floor: 0}]->(b2),
+       (b2)-[:CONNECTED_ON_FLOOR {floor: 0}]->(b1);
+
+MATCH (b1:Building {name: 'B-1'}), (b2:Building {name: 'H-B1B2'})
+CREATE (b1)-[:CONNECTED_ON_FLOOR {floor: 0}]->(b2),
+       (b2)-[:CONNECTED_ON_FLOOR {floor: 0}]->(b1);
+
+MATCH (b1:Building {name: 'B-2'}), (b2:Building {name: 'H-B1B2'})
+CREATE (b1)-[:CONNECTED_ON_FLOOR {floor: 0}]->(b2),
+       (b2)-[:CONNECTED_ON_FLOOR {floor: 0}]->(b1);
+
+MATCH (b1:Building {name: 'B-2'}), (b2:Building {name: 'B-3'})
+CREATE (b1)-[:CONNECTED_ON_FLOOR {floor: 0}]->(b2),
+       (b2)-[:CONNECTED_ON_FLOOR {floor: 0}]->(b1);
+
+MATCH (b1:Building {name: 'B-2'}), (b2:Building {name: 'B-3'})
+CREATE (b1)-[:CONNECTED_ON_FLOOR {floor: 0}]->(b2),
+       (b2)-[:CONNECTED_ON_FLOOR {floor: 0}]->(b1);
+
+
+MATCH (b1:Building {name: 'B-4'}), (b2:Building {name: 'B-3'})
+CREATE (b1)-[:CONNECTED_ON_FLOOR {floor: 0}]->(b2),
+       (b2)-[:CONNECTED_ON_FLOOR {floor: 0}]->(b1);
+
+MATCH (b1:Building {name: 'H-B3B4'}), (b2:Building {name: 'B-3'})
+CREATE (b1)-[:CONNECTED_ON_FLOOR {floor: 0}]->(b2),
+       (b2)-[:CONNECTED_ON_FLOOR {floor: 0}]->(b1);
+
+MATCH (b1:Building {name: 'H-B3B4'}), (b2:Building {name: 'B-4'})
+CREATE (b1)-[:CONNECTED_ON_FLOOR {floor: 0}]->(b2),
+       (b2)-[:CONNECTED_ON_FLOOR {floor: 0}]->(b1);
+
+1.4
+
+MATCH (b:Building)
+WHERE b.name IN ['A-4','B-1', 'B-2', 'A-0', 'C-4', 'A-2', 'A-1']
+SET b:HQ;
+
+CREATE (b1:HQ {name: 'B-5'}),
+(b2:HQ {name: 'D-5'}),
+(b3:HQ {name: 'B-8'}),
+(b4:HQ {name: 'D-8'}),
+(b5:HQ {name: 'D-14'}),
+(b6:HQ {name: 'D-4'}),
+(b7:HQ {name: 'B-7'}),
+(b8:HQ {name: 'C-7'}),
+(b9:HQ {name: 'D-10'}),
+(b10:HQ {name: 'D-17'});
+
+1.5
+MERGE (c1:CLASSROOM {number: '429'})
+MERGE (b1:Building {name: 'C-2'})
+MERGE (c1)-[:IN_BUILDING]->(b1)
+
+MERGE (c2:CLASSROOM {number: '224'})
+MERGE (c2)-[:IN_BUILDING]->(b1)
+
+MERGE (c3:CLASSROOM {number: '216'})
+MERGE (c3)-[:IN_BUILDING]->(b1)
+
+MERGE (c4:CLASSROOM {number: '208'})
+MERGE (c4)-[:IN_BUILDING]->(b1)
+
+MERGE (c5:CLASSROOM {number: 'B'})
+MERGE (b2:Building {name: 'D-10'})
+MERGE (c5)-[:IN_BUILDING]->(b2)
+
+MERGE (c6:CLASSROOM {number: '1.13'})
+MERGE (b3:Building {name: 'C-7'})
+MERGE (c6)-[:IN_BUILDING]->(b3)
+
+MERGE (c7:CLASSROOM {number: '303'})
+MERGE (c7)-[:IN_BUILDING]->(b2)
+
+MERGE (c8:CLASSROOM {number: '315'})
+MERGE (c8)-[:IN_BUILDING]->(b1)
+
+MERGE (c9:CLASSROOM {number: '221'})
+MERGE (c9)-[:IN_BUILDING]->(b1);
+
+
+1.6
+MATCH (b:Building)
+CREATE (:ENTRANCE {name: b.name});
+
+MATCH (e1:ENTRANCE), (e2:ENTRANCE)
+WHERE e1 <> e2
+CREATE (e1)-[:CONNECTED_WITH_FOOTPATH]->(e2);
+
+
+2.1
+MATCH (b:Building)
+WHERE NOT (b)-[:CONNECTED_ON_FLOOR]->()
+RETURN b;
+
+2.2
+MATCH (bs:SERVICE)
+return count (*) as numer_service_buildings;
+
+2.3
+MATCH (b1:Building)-[r:CONNECTED_ON_FLOOR]->(b2)
+where b1.name = 'A-1'
+return b2.name, r.floor;
+
+2.4
+MATCH (start:Building {name: ''}),
+      (end:Building {name: 'B-2'}),
+      path = (start)-[:CONNECTED_ON_FLOOR*]-(end)
+RETURN path;
+
+2.5
+MATCH (start:Building {name: 'C-3'}), (end:Building {name: 'A-0'})
+MATCH path = shortestPath((start)-[:CONNECTED_ON_FLOOR*]-(end))
+RETURN length(path) - 1 AS buildingsCrossed;
+
+2.6
+MATCH (b1:Building)-[:CONNECTED_ON_FLOOR]->(b2)
+WITH b1, COUNT(DISTINCT b2) AS adjacentBuildingsCount
+WHERE adjacentBuildingsCount >= 3
+RETURN b1;
