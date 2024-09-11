@@ -1,0 +1,90 @@
+\o exercise1.txt
+SELECT * FROM orders where composition_id LIKE 'buk1 ';
+EXPLAIN ANALYZE SELECT * FROM orders where composition_id LIKE 'buk1 ';
+CREATE INDEX index_order ON orders
+USING hash (composition_id);
+EXPLAIN ANALYZE SELECT * FROM orders where composition_id LIKE 'buk1 ';
+\o
+
+\o exercise2.txt
+DROP INDEX index_order;
+CREATE INDEX index_order       
+ON orders (composition_id);
+EXPLAIN ANALYZE SELECT * FROM orders where composition_id LIKE 'buk1 ';
+SELECT * from orders
+where composition_id < 'c';
+EXPLAIN ANALYZE SELECT * from orders
+where composition_id < 'c';
+SELECT * from orders
+where composition_id >= 'c';
+EXPLAIN ANALYZE SELECT * from orders
+where composition_id >= 'c';
+SET ENABLE_SEQSCAN TO OFF;
+EXPLAIN ANALYZE SELECT * from orders
+where composition_id < 'c';
+EXPLAIN ANALYZE SELECT * from orders
+where composition_id >= 'c';
+\o
+
+\o exercise3.txt
+create index orders_remarks_idx on orders (remarks);
+select * from orders where (remarks like 'do%');
+Explain analyze select * from orders where (remarks like 'do%');
+drop index orders_remarks_idx;
+CREATE INDEX orders_remarks_idx ON orders (remarks varchar_pattern_ops);
+explain analyze select * from orders where (remarks like 'do%');
+\o
+
+\o exercise4.txt
+create index multi_col_idx on orders (client_id , recipient_id, composition_id);
+select * from orders  where client_id = 'karolina' AND recipient_id = 15 AND composition_id = 'ko3 ';
+explain analyze select * from orders  where client_id = 'karolina' AND recipient_id = 15 AND composition_id = 'ko3 ';
+select * from orders  where client_id = 'karolina' OR recipient_id = 15 OR composition_id = 'ko3 ';
+explain analyze select * from orders  where client_id = 'karolina' OR recipient_id = 15 OR composition_id = 'ko3 ';
+select * from orders where composition_id = 'buk1 ';
+explain analyze select * from orders where composition_id = 'buk1 ';
+drop index multi_col_idx;
+create index idx_client on orders (client_id);
+create index idx_recipient on orders (recipient_id);
+create index idx_composition on orders (composition_id);
+explain analyze select * from orders  where client_id = 'karolina' AND recipient_id = 15 AND composition_id = 'ko3 ';
+explain analyze select * from orders  where client_id = 'karolina' OR recipient_id = 15 OR composition_id = 'ko3 ';
+explain analyze select * from orders where composition_id = 'buk1 ';
+\o
+
+\o exercise5.txt
+select * from orders order by composition_id;
+explain analyze select * from orders order by composition_id;
+drop index idx_composition;
+explain analyze select * from orders order by composition_id;
+drop index idx_recipient;
+drop index idx_client;
+\o
+
+\o exercise6.txt
+create index idx_client on orders (client_id) where (paid);
+select * from orders where client_id = 'mmoraw' AND paid;
+explain analyze select * from orders where client_id = 'mmoraw' AND paid;
+select * from orders where client_id = 'mmoraw' AND paid = 'false';
+Explain analyze select * from orders where client_id = 'mmoraw' AND paid = 'false';
+select sum(price) from orders where paid = 'false' ;
+Explain analyze select sum(price) from orders where paid = 'false' ;
+\o
+
+\o exercise7.txt
+create index idx_city on clients (lower(city));
+Select * from clients where (lower(city) like 'krak%');
+Explain analyze Select * from clients where (lower(city) like 'krak%');
+\o
+
+\o exercise8.txt
+ALTER TABLE orders ADD COLUMN location point;
+UPDATE orders SET location=point(random()*100, random()*100);
+select * from orders where sqrt(pow((location[0]) - 50, 2) + pow((location[1]) - 50, 2)) <= 10;
+select * from orders WHERE (location[0] <= 50 AND location[1] >= 50);
+Explain analyze select * from orders where sqrt(pow((location[0]) - 50, 2) + pow((location[1]) - 50, 2)) <= 10;
+Explain analyze select * from orders WHERE (location[0] <= 50 AND location[1] >= 50);
+CREATE INDEX idx_location_gist ON orders USING GIST (location);
+Explain analyze select * from orders where sqrt(pow((location[0]) - 50, 2) + pow((location[1]) - 50, 2)) <= 10;
+Explain analyze select * from orders WHERE (location[0] <= 50 AND location[1] >= 50);
+\o
