@@ -1,0 +1,51 @@
+The database is accessible at: http://nosql.kis.agh.edu.pl:5984, if you connect from outside of the AGH network, you will need a VPN connection. Login: admin, password: ztb2020.
+
+While using curl you could provide the credentials as part of URI:
+
+curl http://admin:ztb2020@nosql.kis.agh.edu.pl:5984/_all_dbs
+or
+
+curl -u 'admin:ztb2020' http://nosql.kis.agh.edu.pl:5984/_all_dbs
+Actually, as basic access authentication is used, sends base64-encoded credentials within the HTTP header (admin:ztb2020 is encoded as: YWRtaW46enRiMjAyMA==), which can also be done directly as:
+
+curl -H 'Authorization: Basic YWRtaW46enRiMjAyMA==' http://nosql.kis.agh.edu.pl:5984/_all_dbs
+It is strongly recommended to use the web interface first, though: http://nosql.kis.agh.edu.pl:5984/_utils/
+
+Preparation
+Although we all use the same credentials for authentication, each of you should have a separate database.
+
+Please create a database with a unique name (e.g. your name and/or surname, nickname, preferred handle, etc.) and use it for the exercise.
+
+Exercises
+You are developing a shopping list application.
+
+Insert into the database the following documents. The documents that have the following attributes: product, price and store represent items on a shopping list.
+
+{"product":"bread", "price": 2.2, "store":"Biedronka", "when":"weekly"}     
+{"product":"tomato", "price": 2, "store":"Biedronka", "when":"weekly"}
+{"product":"tomato", "price": 3, "store":"Lidl", "when":"weekly"}
+{"product":"tomato", "price": 4, "store":"Auchan", "when":"weekly"}
+{"product":"moon rocket", "price": 119, "store":"Auchan", "description":"Black and White Falcon Heavy"}
+{"product":"lollipop", "price": 1.2, "store":"Lidl"}
+{"product":"lollipop", "price": 1.4, "store":"Biedronka"}
+{"product":"trash", "store":"Biedronka"}
+{"book":"Alice in Wonderland", "price": 22.4, "store":"Biedronka"}
+
+    
+
+        
+Write a view that presents store name, product name and price sorted according to the store's name. Documents that do not have the required attributes should be ignored.
+
+Write a view that counts number of items to buy in each store. Documents that do not have the required attributes should be ignored.
+
+Write a view which calculates an average price of each product (mind reduce/rereduce; calculating it might be tricky, ask for assistance if needed). Documents that do not have the required attributes should be ignored.
+
+What is the URL which shows all items to buy at Lidl?
+
+What is the URL which shows how many items is to buy at Biedronka?
+
+Report
+Please submit:
+
+your design document with all the views
+answers to exercises 5 and 6.
